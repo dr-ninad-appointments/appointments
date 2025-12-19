@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment - Dr. Ninad</title>
     <style>
-        /* Modern, Clean Design */
+        /* Base Styles */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { background: white; width: 100%; max-width: 500px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .container { background: white; width: 100%; max-width: 550px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 25px; font-size: 14px; }
         
         /* Form Fields */
         .form-group { margin-bottom: 15px; }
@@ -18,28 +19,55 @@
         input:focus, select:focus, textarea:focus { border-color: #3498db; outline: none; }
         textarea { resize: vertical; min-height: 80px; }
 
+        /* Week Selector */
+        .week-controls { display: flex; gap: 10px; margin-bottom: 15px; }
+        .week-btn { flex: 1; padding: 10px; border: 1px solid #ddd; background: #f8f9fa; cursor: pointer; border-radius: 6px; font-weight: 600; }
+        .week-btn.active { background: #3498db; color: white; border-color: #3498db; }
+
         /* Slot Buttons */
-        .slots-container { margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef; }
-        .loading-text { text-align: center; color: #666; font-style: italic; }
+        .slots-container { margin-top: 20px; background: #fff; border-top: 2px solid #eee; padding-top: 15px; }
+        .loading-text { text-align: center; color: #666; font-style: italic; padding: 20px; }
         
-        .date-header { font-size: 14px; font-weight: bold; margin: 15px 0 8px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
-        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
+        .date-header { font-size: 15px; font-weight: 700; margin: 20px 0 10px; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
         
+        /* THE GREEN/RED BUTTON STYLES */
         .slot-btn {
-            padding: 10px 5px; background: white; border: 1px solid #ced4da; border-radius: 6px; 
-            cursor: pointer; font-size: 13px; color: #495057; transition: all 0.2s;
+            padding: 10px 5px; 
+            background: #d4edda; /* Light Green */
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            transition: all 0.2s;
         }
-        .slot-btn:hover { border-color: #3498db; color: #3498db; }
-        .slot-btn.selected { background: #3498db; color: white; border-color: #3498db; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3); }
-        .slot-btn.booked { background: #e9ecef; color: #adb5bd; border-color: #dee2e6; cursor: not-allowed; text-decoration: line-through; }
+        .slot-btn:hover { background: #c3e6cb; transform: translateY(-1px); }
+        
+        .slot-btn.selected { 
+            background: #28a745; /* Dark Green */
+            color: white; 
+            border-color: #28a745; 
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.4); 
+            font-weight: bold;
+        }
+        
+        .slot-btn.booked { 
+            background: #f8d7da; /* Light Red */
+            color: #721c24; 
+            border-color: #f5c6cb; 
+            cursor: not-allowed; 
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
 
         /* Book Button */
         .book-btn {
-            width: 100%; padding: 16px; background: #2ecc71; color: white; border: none; 
+            width: 100%; padding: 16px; background: #3498db; color: white; border: none; 
             border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 25px; 
             transition: background 0.3s;
         }
-        .book-btn:hover:not(:disabled) { background: #27ae60; }
+        .book-btn:hover:not(:disabled) { background: #2980b9; }
         .book-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
 
         /* Status Messages */
@@ -51,11 +79,12 @@
 <body>
 
 <div class="container">
-    <h2>📅 Dr. Ninad Appointment</h2>
+    <h2>📅 Book Appointment</h2>
+    <div class="subtitle">Dr. Ninad's Office</div>
     
     <div class="form-group">
         <label>Full Name</label>
-        <input type="text" id="name" placeholder="Enter your name">
+        <input type="text" id="name" placeholder="Enter your full name">
     </div>
     
     <div class="form-group">
@@ -69,7 +98,7 @@
     </div>
     
     <div class="form-group">
-        <label>Purpose</label>
+        <label>Purpose of Visit</label>
         <textarea id="purpose" placeholder="Reason for visit..."></textarea>
     </div>
     
@@ -83,9 +112,17 @@
         </select>
     </div>
 
+    <div class="form-group">
+        <label>Select Week</label>
+        <div class="week-controls">
+            <button class="week-btn active" id="btnCurrent" onclick="changeWeek('current')">This Week</button>
+            <button class="week-btn" id="btnNext" onclick="changeWeek('next')">Next Week</button>
+        </div>
+    </div>
+
     <!-- Slots Area -->
     <div id="slotsWrapper" class="slots-container">
-        <div id="slotsContainer" class="loading-text">Loading available slots...</div>
+        <div id="slotsContainer" class="loading-text">Select options above to load slots...</div>
     </div>
 
     <!-- Action Button -->
@@ -98,10 +135,11 @@
 </div>
 
 <script>
-    // ✅ YOUR FINAL DEPLOYED SCRIPT URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxR3vs1VnwzlZqd6G_YHkhRdIKpG96DQIGiSe3E6U-UV0wzHvowd2Pm9X5NMsd2suvj/exec";
+    // 🔴 PASTE YOUR DEPLOYED WEB APP URL HERE
+    const SCRIPT_URL = "PASTE_YOUR_NEW_URL_HERE";
 
     let selectedSlot = null;
+    let currentWeek = 'current';
 
     // 1. Load Slots Function
     async function loadSlots() {
@@ -109,13 +147,13 @@
         const duration = document.getElementById("duration").value;
         const btn = document.getElementById("submitBtn");
         
-        container.innerHTML = "Refreshing availability...";
+        container.innerHTML = '<div class="loading-text">↻ Loading available slots...</div>';
         btn.disabled = true;
         btn.innerText = "Select a Time Slot";
         selectedSlot = null;
 
         try {
-            const response = await fetch(`${SCRIPT_URL}?action=getSlots&week=current&duration=${duration}`);
+            const response = await fetch(`${SCRIPT_URL}?action=getSlots&week=${currentWeek}&duration=${duration}`);
             const data = await response.json();
 
             if (!data.success) throw new Error(data.error || "Failed to load slots");
@@ -123,4 +161,137 @@
             container.innerHTML = ""; // Clear loading text
 
             if (data.slots.length === 0) {
-                container.innerHTML = "No slots av
+                container.innerHTML = '<div class="loading-text">No slots available this week.</div>';
+                return;
+            }
+
+            data.slots.forEach(day => {
+                const header = document.createElement("div");
+                header.className = "date-header";
+                header.innerText = day.date;
+                container.appendChild(header);
+
+                const grid = document.createElement("div");
+                grid.className = "slots-grid";
+
+                day.slots.forEach(slot => {
+                    const slotBtn = document.createElement("button");
+                    slotBtn.className = "slot-btn";
+                    slotBtn.innerText = slot.time;
+                    
+                    if (slot.booked) {
+                        slotBtn.classList.add("booked");
+                        slotBtn.disabled = true;
+                        slotBtn.title = "Already Booked";
+                    } else {
+                        slotBtn.onclick = () => selectSlot(slot, slotBtn);
+                    }
+                    grid.appendChild(slotBtn);
+                });
+                container.appendChild(grid);
+            });
+
+        } catch (error) {
+            container.innerHTML = `<div class="loading-text" style="color:red">Error loading slots. Please refresh page.<br><small>${error.message}</small></div>`;
+            console.error(error);
+        }
+    }
+
+    // 2. Select Slot Logic
+    function selectSlot(slot, btnElement) {
+        document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("selected"));
+        btnElement.classList.add("selected");
+        selectedSlot = slot;
+        
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = false;
+        btn.innerText = "Book Appointment";
+    }
+
+    // 3. Change Week Logic
+    function changeWeek(week) {
+        currentWeek = week;
+        document.getElementById('btnCurrent').className = week === 'current' ? 'week-btn active' : 'week-btn';
+        document.getElementById('btnNext').className = week === 'next' ? 'week-btn active' : 'week-btn';
+        loadSlots();
+    }
+
+    // 4. Book Appointment Logic
+    async function bookAppointment() {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const purpose = document.getElementById("purpose").value.trim();
+        const duration = document.getElementById("duration").value;
+
+        if (!name || !email || !phone || !selectedSlot) {
+            showStatus("⚠️ Please fill all fields and select a time slot.", "error");
+            return;
+        }
+
+        const btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+        showStatus("⏳ Booking your appointment...", "success");
+
+        const payload = {
+            action: "bookAppointment",
+            name: name,
+            email: email,
+            phone: phone,
+            purpose: purpose,
+            duration: duration,
+            slotStart: selectedSlot.start
+        };
+
+        try {
+            // FIXED: Sending JSON correctly so 'name' is not undefined
+            const response = await fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showStatus("✅ Appointment Confirmed! Check your email.", "success");
+                btn.innerText = "Booked Successfully";
+                
+                // Clear form
+                document.getElementById("name").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("phone").value = "";
+                document.getElementById("purpose").value = "";
+                document.getElementById("slotsContainer").innerHTML = "";
+                selectedSlot = null;
+                
+                // Refresh slots after 3 seconds
+                setTimeout(() => {
+                    showStatus("", "success");
+                    document.getElementById("status").style.display = "none";
+                    loadSlots();
+                }, 3000);
+            } else {
+                throw new Error(result.error || "Unknown error occurred");
+            }
+
+        } catch (error) {
+            showStatus("❌ Booking Failed: " + error.message, "error");
+            btn.disabled = false;
+            btn.innerText = "Try Again";
+        }
+    }
+
+    function showStatus(msg, type) {
+        const el = document.getElementById("status");
+        el.style.display = "block";
+        el.className = type;
+        el.innerText = msg;
+    }
+
+    // Initialize on page load
+    window.onload = loadSlots;
+</script>
+
+</body>
+</html>
