@@ -1,488 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment - Dr. Ninad</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            opacity: 0.9;
-            font-size: 16px;
-        }
-        
-        .content {
-            padding: 30px;
-        }
-        
-        .info-box {
-            background: #fef3c7;
-            border: 2px solid #fbbf24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .week-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .week-btn {
-            flex: 1;
-            min-width: 150px;
-            padding: 12px;
-            background: #f5f5f5;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 16px;
-        }
-        
-        .week-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .day-section {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #f9fafb;
-            border-radius: 12px;
-        }
-        
-        .day-section h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .slot-btn {
-            padding: 12px;
-            background: #f0f9ff;
-            border: 2px solid #bfdbfe;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        .slot-btn:hover {
-            background: #dbeafe;
-            border-color: #93c5fd;
-        }
-        
-        .slot-btn.selected {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .slot-btn.booked {
-            background: #fee;
-            border-color: #fcc;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-        
-        .submit-btn:hover:not(:disabled) {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-        
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
-        }
-        
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        .message.success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 2px solid #10b981;
-            display: block;
-        }
-        
-        .message.error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 2px solid #ef4444;
-            display: block;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Appointment - Dr. Ninad</title>
 
-        .config-warning {
-            background: #fee;
-            border: 2px solid #f00;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            color: #991b1b;
-            font-weight: bold;
-        }
-    </style>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    padding: 20px;
+}
+.container {
+    max-width: 900px;
+    background: white;
+    margin: auto;
+    border-radius: 15px;
+    padding: 25px;
+}
+h1 {
+    text-align: center;
+    color: #4f46e5;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+.week-btn {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: #eee;
+    margin-right: 5px;
+}
+.week-btn.active {
+    background: #4f46e5;
+    color: white;
+}
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
+    gap: 10px;
+}
+.slot-btn {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #4f46e5;
+    background: #eef2ff;
+    cursor: pointer;
+}
+.slot-btn.booked {
+    background: #fee2e2;
+    border-color: #ef4444;
+    cursor: not-allowed;
+}
+.slot-btn.selected {
+    background: #4f46e5;
+    color: white;
+}
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+}
+.message {
+    padding: 12px;
+    margin-bottom: 15px;
+    display: none;
+    border-radius: 6px;
+}
+.success { background:#d1fae5; color:#065f46; }
+.error { background:#fee2e2; color:#991b1b; }
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📅 Book Appointment with Dr. Ninad</h1>
-            <p>Schedule your visit - Monday to Friday, 9 AM to 5 PM (IST)</p>
-        </div>
-        
-        <div class="content">
-            <div id="message" class="message"></div>
-            
-            <div id="configWarning" class="config-warning" style="display: none;">
-                ⚠️ SETUP REQUIRED: Please update SCRIPT_URL in the code with your Google Apps Script web app URL
-            </div>
+<div class="container">
+<h1>📅 Book Appointment with Dr. Ninad</h1>
 
-            <div class="info-box">
-                <strong>⏰ Available Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (IST)<br>
-                <strong>📌 Slot Duration:</strong> 15, 30, 45, or 60 minutes<br>
-                <strong>✅ No login required!</strong> Just fill the form and book your slot
-            </div>
-            
-            <form id="appointmentForm">
-                <div class="form-group">
-                    <label>👤 Full Name *</label>
-                    <input type="text" id="name" required placeholder="Enter your full name">
-                </div>
-                
-                <div class="form-group">
-                    <label>📧 Email *</label>
-                    <input type="email" id="email" required placeholder="your.email@example.com">
-                </div>
-                
-                <div class="form-group">
-                    <label>📱 Phone Number *</label>
-                    <input type="tel" id="phone" required placeholder="+91 1234567890">
-                </div>
-                
-                <div class="form-group">
-                    <label>📝 Purpose of Visit *</label>
-                    <textarea id="purpose" required placeholder="Please describe the purpose of your visit..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>⏱️ Appointment Duration *</label>
-                    <select id="duration" required>
-                        <option value="15">15 minutes</option>
-                        <option value="30">30 minutes</option>
-                        <option value="45">45 minutes</option>
-                        <option value="60">60 minutes (1 hour)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>📅 Select Week</label>
-                    <div class="week-selector">
-                        <button type="button" class="week-btn active" data-week="current">
-                            This Week
-                        </button>
-                        <button type="button" class="week-btn" data-week="next">
-                            Next Week
-                        </button>
-                    </div>
-                </div>
-                
-                <div id="slotsContainer" class="loading">
-                    Loading available slots...
-                </div>
-                
-                <button type="submit" class="submit-btn" id="submitBtn" disabled>
-                    Book Appointment
-                </button>
-            </form>
-        </div>
-    </div>
+<div id="message" class="message"></div>
 
-    <script>
-        // ⚠️ IMPORTANT: Replace this URL with your Google Apps Script web app URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxR3vs1VnwzlZqd6G_YHkhRdIKpG96DQIGiSe3E6U-UV0wzHvowd2Pm9X5NMsd2suvj/exec';
-        
-        let selectedWeek = 'current';
-        let selectedSlot = null;
-        let bookedSlots = [];
+<form id="appointmentForm">
 
-        // Check if script URL is configured
-        if (SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
-            document.getElementById('configWarning').style.display = 'block';
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAvailableSlots();
-            
-            // Week selector
-            document.querySelectorAll('.week-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    selectedWeek = e.target.dataset.week;
-                    document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    selectedSlot = null;
-                    document.getElementById('submitBtn').disabled = true;
-                    loadAvailableSlots();
-                });
-            });
-            
-            // Duration change
-            document.getElementById('duration').addEventListener('change', () => {
-                selectedSlot = null;
-                document.getElementById('submitBtn').disabled = true;
-                loadAvailableSlots();
-            });
-            
-            // Form submit
-            document.getElementById('appointmentForm').addEventListener('submit', handleSubmit);
+<div class="form-group">
+<label>Full Name *</label>
+<input id="name" required>
+</div>
+
+<div class="form-group">
+<label>Email *</label>
+<input id="email" type="email" required>
+</div>
+
+<div class="form-group">
+<label>Phone *</label>
+<input id="phone" required>
+</div>
+
+<div class="form-group">
+<label>Purpose *</label>
+<textarea id="purpose" required></textarea>
+</div>
+
+<div class="form-group">
+<label>Duration *</label>
+<select id="duration">
+<option value="15">15 min</option>
+<option value="30">30 min</option>
+<option value="45">45 min</option>
+<option value="60">60 min</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Select Week</label>
+<button type="button" class="week-btn active" onclick="selectWeek('current',this)">This Week</button>
+<button type="button" class="week-btn" onclick="selectWeek('next',this)">Next Week</button>
+</div>
+
+<div id="slotsContainer">Loading slots...</div>
+
+<button id="submitBtn" class="submit-btn" disabled>Book Appointment</button>
+
+</form>
+</div>
+
+<script>
+/* 🔴 PASTE YOUR DEPLOYED APPS SCRIPT WEB APP URL HERE */
+const SCRIPT_URL = "PASTE_YOUR_SCRIPT_URL_HERE";
+
+let selectedWeek = "current";
+let selectedSlot = null;
+
+function showMessage(text,type){
+    const m=document.getElementById("message");
+    m.className="message "+type;
+    m.innerText=text;
+    m.style.display="block";
+}
+
+function selectWeek(week,el){
+    selectedWeek=week;
+    document.querySelectorAll(".week-btn").forEach(b=>b.classList.remove("active"));
+    el.classList.add("active");
+    loadSlots();
+}
+
+async function loadSlots(){
+    document.getElementById("slotsContainer").innerHTML="Loading slots...";
+    selectedSlot=null;
+    document.getElementById("submitBtn").disabled=true;
+
+    const duration=document.getElementById("duration").value;
+    const res=await fetch(`${SCRIPT_URL}?action=getSlots&week=${selectedWeek}&duration=${duration}`);
+    const data=await res.json();
+
+    if(!data.success){
+        showMessage(data.error || "Failed to load slots","error");
+        return;
+    }
+
+    let html="";
+    data.slots.forEach(day=>{
+        html+=`<h3>${day.date}</h3><div class="slots-grid">`;
+        day.slots.forEach(slot=>{
+            if(slot.booked){
+                html+=`<button class="slot-btn booked">${slot.time}</button>`;
+            }else{
+                html+=`<button class="slot-btn" onclick='selectSlot(${JSON.stringify(slot)},this)'>${slot.time}</button>`;
+            }
         });
-        
-        async function loadAvailableSlots() {
-            const container = document.getElementById('slotsContainer');
-            container.innerHTML = '<div class="loading">Loading available slots...</div>';
-            
-            try {
-                const duration = parseInt(document.getElementById('duration').value);
-                const response = await fetch(`${SCRIPT_URL}?action=getSlots&week=${selectedWeek}&duration=${duration}`);
-                
-                if (!response.ok) throw new Error('Failed to load slots');
-                
-                const data = await response.json();
-                
-                if (data.error) {
-                    container.innerHTML = `<div class="message error">${data.error}</div>`;
-                    return;
-                }
-                
-                bookedSlots = data.bookedSlots || [];
-                displaySlots(data.slots);
-                
-            } catch (error) {
-                console.error('Error loading slots:', error);
-                container.innerHTML = '<div class="message error">Error loading slots. Please refresh the page.</div>';
-            }
-        }
-        
-        function displaySlots(slotsByDay) {
-            const container = document.getElementById('slotsContainer');
-            container.innerHTML = '';
-            
-            if (!slotsByDay || slotsByDay.length === 0) {
-                container.innerHTML = '<div class="message error">No available slots found for this week.</div>';
-                return;
-            }
-            
-            slotsByDay.forEach(day => {
-                const daySection = document.createElement('div');
-                daySection.className = 'day-section';
-                
-                const title = document.createElement('h3');
-                title.textContent = day.date;
-                daySection.appendChild(title);
-                
-                const slotsGrid = document.createElement('div');
-                slotsGrid.className = 'slots-grid';
-                
-                day.slots.forEach(slot => {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'slot-btn';
-                    btn.textContent = slot.time;
-                    
-                    if (slot.booked) {
-                        btn.classList.add('booked');
-                        btn.disabled = true;
-                    } else {
-                        btn.addEventListener('click', () => selectSlot(slot, btn));
-                    }
-                    
-                    slotsGrid.appendChild(btn);
-                });
-                
-                daySection.appendChild(slotsGrid);
-                container.appendChild(daySection);
-            });
-        }
-        
-        function selectSlot(slot, btn) {
-            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            selectedSlot = slot;
-            document.getElementById('submitBtn').disabled = false;
-        }
-        
-        async function handleSubmit(e) {
-            e.preventDefault();
-            
-            if (!selectedSlot) {
-                showMessage('Please select a time slot', 'error');
-                return;
-            }
-            
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Booking...';
-            
-            try {
-                const formData = {
-                    action: 'bookAppointment',
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    purpose: document.getElementById('purpose').value,
-                    duration: document.getElementById('duration').value,
-                    slotStart: selectedSlot.start,
-                    slotTime: selectedSlot.time,
-                    slotDate: selectedSlot.date
-                };
-                
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    showMessage('✅ Appointment booked successfully! Confirmation email sent to ' + formData.email, 'success');
-                    document.getElementById('appointmentForm').reset();
-                    selectedSlot = null;
-                    setTimeout(() => {
-                        loadAvailableSlots();
-                    }, 2000);
-                } else {
-                    showMessage('❌ ' + (data.error || 'Failed to book appointment. Please try again.'), 'error');
-                }
-                
-            } catch (error) {
-                console.error('Error booking appointment:', error);
-                showMessage('❌ Error booking appointment. Please try again.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Book Appointment';
-            }
-        }
-        
-        function showMessage(text, type) {
-            const msg = document.getElementById('message');
-            msg.textContent = text;
-            msg.className = `message ${type}`;
-            msg.style.display = 'block';
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    msg.style.display = 'none';
-                }, 8000);
-            }
-        }
-    </script>
+        html+="</div>";
+    });
+
+    document.getElementById("slotsContainer").innerHTML=html;
+}
+
+function selectSlot(slot,btn){
+    document.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    selectedSlot=slot;
+    document.getElementById("submitBtn").disabled=false;
+}
+
+document.getElementById("duration").addEventListener("change",loadSlots);
+
+document.getElementById("appointmentForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    if(!selectedSlot) return;
+
+    document.getElementById("submitBtn").disabled=true;
+
+    const payload={
+        action:"bookAppointment",
+        name:name.value,
+        email:email.value,
+        phone:phone.value,
+        purpose:purpose.value,
+        duration:duration.value,
+        slotStart:selectedSlot.start
+    };
+
+    const res=await fetch(SCRIPT_URL,{
+        method:"POST",
+        body:JSON.stringify(payload)
+    });
+
+    const data=await res.json();
+
+    if(data.success){
+        showMessage("✅ Appointment booked & confirmation email sent","success");
+        e.target.reset();
+        loadSlots();
+    }else{
+        showMessage(data.error || "Booking failed","error");
+    }
+});
+
+loadSlots();
+</script>
 </body>
 </html>
